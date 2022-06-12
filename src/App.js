@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import axios from 'axios';
+
 
 import PositiveImage1 from './images/positive/MIDRC-RICORD-1C-419639-000002-10161-0.png';
 import PositiveImage2 from './images/positive/MIDRC-RICORD-1C-419639-000025-04760-0.png';
@@ -19,7 +19,7 @@ import PositiveImage6 from './images/positive/MIDRC-RICORD-1C-419639-000025-5088
 import PositiveImage7 from './images/positive/MIDRC-RICORD-1C-419639-000025-53641-0.png';
 import PositiveImage8 from './images/positive/MIDRC-RICORD-1C-419639-000025-56001-0.png';
 import PositiveImage9 from './images/positive/MIDRC-RICORD-1C-419639-000025-56207-0.png';
-
+import SubmitImage from './submissionHelper';
 
 
 
@@ -66,13 +66,25 @@ const XRayImages = [
 function App() {
 
   const [selectedImage, setImage] = useState(PositiveImage1);
-  const [analysisResponse, setResponse] = useState(null);
+  const [imageCount] = useState(30482);
+  const [positiveValue, setPositive] = useState("Loading");
+  const [negativeValue, setNegative] = useState("Loading");
+  const [predicitonValue, setPrediciton] = useState("Loading");
 
   const handleSubmitImage = (image) => 
   {
     setImage(image);
-    axios.post("", image).then(res => setResponse(res.data));
+    SubmitImage(image)
+    .then(value => handleSetAnalysisResponse(value))
+
   }
+
+  const handleSetAnalysisResponse = (value) => 
+  {
+        setPositive(value.data.score[1]);
+        setNegative(value.data.score[0]);
+        setPrediciton(value.data.prediction);
+    }
 
   return (
     <React.Fragment>
@@ -129,17 +141,18 @@ function App() {
         <Grid item>
           <Paper variant="outlined" sx={{ height: '88vh', width: '20vw', margin: 1, padding: 1 }}>
             <Typography>
-              Data used up until now to creat the model:
-              Images Analyzed: 100000 <br />
-              Alannahs Impressed: 0 <br />
+              Data used up until now to create the model: <br />
+              Images Analyzed: {imageCount} <br />
               Model Accuracy as Evaulated by .NET 6: 97.6%
 
             </Typography>
             <hr />
             <Typography>
-              Details for Selected Image: <br/>
-              Probability of Covid-19 Diagnosis: 100% <br/>
-              Probability of a Covid-19 Negative Diagnosis: 100%
+              Details for then selected Image: <br/>
+              Probability of Covid-19 Diagnosis: {positiveValue * 100}% <br/>
+              Probability of a Covid-19 Negative Diagnosis: {negativeValue * 100}% <br />
+              <hr/>
+              Study Catorgorized as: Covid {predicitonValue}
             </Typography>
 
 
