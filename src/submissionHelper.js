@@ -6,7 +6,7 @@ const SubmitImage = (image) =>
 {
 
     return axios.post(
-    "https://localhost:7132/api/Submission", 
+    "https://isaacwinterswgucapstoneapi.azurewebsites.net/api/Submission", 
     {
         imageId: uuidv4().toString(),
         imagePath: image,

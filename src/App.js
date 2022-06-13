@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 import PositiveImage1 from './images/positive/MIDRC-RICORD-1C-419639-000002-10161-0.png';
 import PositiveImage2 from './images/positive/MIDRC-RICORD-1C-419639-000025-04760-0.png';
@@ -65,14 +65,16 @@ const XRayImages = [
 
 function App() {
 
-  const [selectedImage, setImage] = useState(PositiveImage1);
+  const [selectedImage, setImage] = useState();
   const [imageCount] = useState(30482);
-  const [positiveValue, setPositive] = useState("Loading");
+  const [loading, setLoading] =useState(true);
+  const [positiveValue, setPositive] = useState("");
   const [negativeValue, setNegative] = useState("Loading");
   const [predicitonValue, setPrediciton] = useState("Loading");
 
   const handleSubmitImage = (image) => 
   {
+    setLoading(true);
     setImage(image);
     SubmitImage(image)
     .then(value => handleSetAnalysisResponse(value))
@@ -81,6 +83,7 @@ function App() {
 
   const handleSetAnalysisResponse = (value) => 
   {
+        setLoading(false);
         setPositive(value.data.score[1]);
         setNegative(value.data.score[0]);
         setPrediciton(value.data.prediction);
@@ -111,17 +114,22 @@ function App() {
           }}>
             <Grid container sx={{ justifyContent: "center", }}>
               <Grid item>
-                <Box
-                  component="img"
-                  sx={{
-                    height: '60vh'
-                  }}
-                  alt="X-Ray study of a human torso"
-                  src={selectedImage}
-                />
+                {selectedImage == null ? 
+                <Typography variant="h2" gutterBottom component="div">
+                  Select and Image below to explore the AI
+                </Typography>:
+                 <Box
+                 component="img"
+                 sx={{
+                   height: '50vh'
+                 }}
+                 alt="X-Ray study of a human torso"
+                 src={selectedImage}
+               />}
+                
               </Grid>
               <Grid item>
-                <ImageList sx={{ height: '20vh', width: '50vw' }} cols={3}>
+                <ImageList sx={{ height: '30vh', width: '50vw' }} cols={3} padding={2}>
                   {XRayImages.map((item) => (
                     <ImageListItem key={item.img}>
                       <img
@@ -149,10 +157,10 @@ function App() {
             <hr />
             <Typography>
               Details for then selected Image: <br/>
-              Probability of Covid-19 Diagnosis: {positiveValue * 100}% <br/>
-              Probability of a Covid-19 Negative Diagnosis: {negativeValue * 100}% <br />
+              Probability of Covid-19 Diagnosis: { loading ? <CircularProgress /> : positiveValue * 100 } % <br/>
+              Probability of a Covid-19 Negative Diagnosis:{loading ? <CircularProgress /> : negativeValue * 100}% <br />
               <hr/>
-              Study Catorgorized as: Covid {predicitonValue}
+              Study Catorgorized as: Covid {loading ? <CircularProgress /> : predicitonValue }
             </Typography>
 
 
