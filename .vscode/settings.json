@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/c1687e6c-ac1d-4091-b796-898ac29cb71d/microsoft.web/sites/subscriptions/c1687e6c-ac1d-4091-b796-898ac29cb71d/resourceGroups/appsvc_linux_centralus_basic/providers/Microsoft.Web/sites/IsaacWintersCapstoneUI",
+    "appService.deploySubpath": "."
+}
