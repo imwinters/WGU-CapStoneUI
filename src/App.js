@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper'
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import CircularProgress from '@mui/material/CircularProgress';
+import Link from '@mui/material/Link';
 
 import PositiveImage1 from './images/positive/MIDRC-RICORD-1C-419639-000002-10161-0.png';
 import PositiveImage2 from './images/positive/MIDRC-RICORD-1C-419639-000025-04760-0.png';
@@ -67,27 +68,27 @@ function App() {
 
   const [selectedImage, setImage] = useState();
   const [imageCount] = useState(30482);
-  const [loading, setLoading] =useState(true);
+  const [loading, setLoading] = useState(true);
   const [positiveValue, setPositive] = useState("");
   const [negativeValue, setNegative] = useState("Loading");
   const [predicitonValue, setPrediciton] = useState("Loading");
+  const [postiveCount] = useState(2158);
+  const [negativeCount] = useState(28324);
 
-  const handleSubmitImage = (image) => 
-  {
+  const handleSubmitImage = (image) => {
     setLoading(true);
     setImage(image);
     SubmitImage(image)
-    .then(value => handleSetAnalysisResponse(value))
+      .then(value => handleSetAnalysisResponse(value))
 
   }
 
-  const handleSetAnalysisResponse = (value) => 
-  {
-        setLoading(false);
-        setPositive(value.data.score[1]);
-        setNegative(value.data.score[0]);
-        setPrediciton(value.data.prediction);
-    }
+  const handleSetAnalysisResponse = (value) => {
+    setLoading(false);
+    setPositive(value.data.score[1]);
+    setNegative(value.data.score[0]);
+    setPrediciton(value.data.prediction);
+  }
 
   return (
     <React.Fragment>
@@ -97,7 +98,7 @@ function App() {
             WGU Capstone
           </Typography>
           <Typography>
-            Isaac M. Winters
+            Isaac M. Winters - Isaac@McPhee-Winters.com
           </Typography>
         </Toolbar>
       </AppBar>
@@ -114,19 +115,19 @@ function App() {
           }}>
             <Grid container sx={{ justifyContent: "center", }}>
               <Grid item>
-                {selectedImage == null ? 
-                <Typography variant="h2" gutterBottom component="div">
-                  Select and Image below to explore the AI
-                </Typography>:
-                 <Box
-                 component="img"
-                 sx={{
-                   height: '50vh'
-                 }}
-                 alt="X-Ray study of a human torso"
-                 src={selectedImage}
-               />}
-                
+                {selectedImage == null ?
+                  <Typography variant="h2" gutterBottom component="div">
+                    Select and Image below to explore the AI
+                  </Typography> :
+                  <Box
+                    component="img"
+                    sx={{
+                      height: '55vh'
+                    }}
+                    alt="X-Ray study of a human torso"
+                    src={selectedImage}
+                  />}
+
               </Grid>
               <Grid item>
                 <ImageList sx={{ height: '30vh', width: '50vw' }} cols={3} padding={2}>
@@ -148,22 +149,35 @@ function App() {
         </Grid>
         <Grid item>
           <Paper variant="outlined" sx={{ height: '88vh', width: '20vw', margin: 1, padding: 1 }}>
+            <Typography variant='h5'>
+              Data used to create the model: <br />
+            </Typography>
             <Typography>
-              Data used up until now to create the model: <br />
               Images Analyzed: {imageCount} <br />
-              Model Accuracy as Evaulated by .NET 6: 97.6%
-
+              Covid Positive Images: {postiveCount} <br />
+              Covid Negative Images: {negativeCount} <br />
+              Model Accuracy as Evaulated by .NET 6: 97.6% <br/>
             </Typography>
             <hr />
             <Typography>
-              Details for then selected Image: <br/>
-              Probability of Covid-19 Diagnosis: { loading ? <CircularProgress /> : positiveValue * 100 } % <br/>
-              Probability of a Covid-19 Negative Diagnosis:{loading ? <CircularProgress /> : negativeValue * 100}% <br />
-              <hr/>
-              Study Catorgorized as: Covid {loading ? <CircularProgress /> : predicitonValue }
+              Details for then selected Image: <br />
+              Probability of Covid-19 Diagnosis: {loading ? <CircularProgress /> : Math.round(positiveValue * 100)}% <br />
+              Probability of a Covid-19 Negative Diagnosis: {loading ? <CircularProgress /> : Math.round(negativeValue * 100)}% <br />
             </Typography>
+            <hr />
+            <Typography sx={{ fontWeight: 'bold' }}>
+              Study Catorgorized as: SARS-CoV-2: {loading ? <CircularProgress /> : predicitonValue.toUpperCase()}
+            </Typography>
+            <hr />
 
-
+            <Typography>
+              This application is intended only to demonstrate the power of
+              residual neural networks on image based data sets. All 9 sample images are Covid-19 Positive.
+              It should not be used as a diagnostic tool.
+              For information about Covid 19 reach out your doctor or visit: 
+              <Link href="https://www.cdc.gov/coronavirus/2019-ncov/index.html"> https://www.cdc.gov/coronavirus/2019-ncov/index.html</Link>
+            </Typography>
+            
           </Paper>
         </Grid>
       </Grid>
