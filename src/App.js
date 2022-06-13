@@ -160,9 +160,9 @@ function App() {
             </Typography>
             <hr />
             <Typography>
-              Details for then selected Image: <br />
-              Probability of Covid-19 Diagnosis: {loading ? <CircularProgress /> : Math.round(positiveValue * 100)}% <br />
-              Probability of a Covid-19 Negative Diagnosis: {loading ? <CircularProgress /> : Math.round(negativeValue * 100)}% <br />
+              Details for the selected image: <br />
+              Probability of Covid-19 diagnosis: {loading ? <CircularProgress /> : Math.round(positiveValue * 100)}% <br />
+              Probability of a Covid-19 negative diagnosis: {loading ? <CircularProgress /> : Math.round(negativeValue * 100)}% <br />
             </Typography>
             <hr />
             <Typography sx={{ fontWeight: 'bold' }}>
