@@ -132,7 +132,7 @@ function App() {
             textAlign: "center",
             padding: 1
           }}>
-            <Grid container sx={{ justifyContent: "center", }}>
+            <Grid container sx={{ justifyContent: "center" }}>
               <Grid item>
                 {selectedImage == null ?
                   <Typography variant="h2" gutterBottom component="div">
