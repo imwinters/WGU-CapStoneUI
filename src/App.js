@@ -10,6 +10,8 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Link from '@mui/material/Link';
+import Slider from '@mui/material/Slider';
+import { PieChart } from "react-minimal-pie-chart";
 
 import PositiveImage1 from './images/positive/MIDRC-RICORD-1C-419639-000002-10161-0.png';
 import PositiveImage2 from './images/positive/MIDRC-RICORD-1C-419639-000025-04760-0.png';
@@ -62,18 +64,34 @@ const XRayImages = [
     title: 'Positive9',
   }
 ];
+const marks = [
+  {
+    value: 0,
+    label: 'Negative'
+  },
+  {
+    value: 100,
+    label: 'Positive'
+  },
+];
+
 
 
 function App() {
 
   const [selectedImage, setImage] = useState();
   const [imageCount] = useState(30482);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState("");
   const [positiveValue, setPositive] = useState("");
-  const [negativeValue, setNegative] = useState("Loading");
-  const [predicitonValue, setPrediciton] = useState("Loading");
+  const [negativeValue, setNegative] = useState("");
+  const [predicitonValue, setPrediciton] = useState("");
   const [postiveCount] = useState(2158);
   const [negativeCount] = useState(28324);
+
+  const myData = [
+    { title: "Positive", value: postiveCount, color: "#0070F0" },
+    { title: "Negative", value: negativeCount, color: "#001731" },
+  ];
 
   const handleSubmitImage = (image) => {
     setLoading(true);
@@ -90,6 +108,7 @@ function App() {
     setPrediciton(value.data.prediction);
   }
 
+
   return (
     <React.Fragment>
       <AppBar position='sticky'>
@@ -102,10 +121,10 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Grid container>
+      <Grid container justifyContent={"space-evenly"}>
         <Grid item>
           <Paper variant="outlined" sx={{
-            width: '75vw',
+            width: '55vw',
             height: '88vh',
             margin: 1,
             display: "flex",
@@ -156,8 +175,32 @@ function App() {
               Images Analyzed: {imageCount} <br />
               Covid Positive Images: {postiveCount} <br />
               Covid Negative Images: {negativeCount} <br />
-              Model Accuracy as Evaulated by .NET 6: 97.6% <br/>
+              Model Accuracy as Evaulated by .NET 6: 97.6% <br />
             </Typography>
+            <hr/>
+            <Box sx={{justifyContent:'center', alignItems:'center'}} height={'20vh'}>
+              <Typography>
+                Distribution of data in the data set:
+              </Typography>
+            <PieChart
+              // your data
+              data={myData}
+              animate
+              animationDuration={500}
+              animationEasing="ease-out"
+              radius={35}
+              height={"75%"}
+              label={({ dataEntry }) => dataEntry.title + " - " + dataEntry.value }
+              labelStyle={() => ({
+                fontSize: '8px',
+                fontFamily: 'sans-serif',
+              })}
+              labelPosition={112}
+              title={"Data Distribution"}
+            />
+            </Box>
+
+
             <hr />
             <Typography>
               Details for the selected image: <br />
@@ -165,7 +208,19 @@ function App() {
               Probability of a Covid-19 negative diagnosis: {loading ? <CircularProgress /> : Math.round(negativeValue * 100)}% <br />
             </Typography>
             <hr />
-            <Typography sx={{ fontWeight: 'bold' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '5vh' }}>
+              <Slider
+                sx={{ width: '75%' }}
+                aria-label="Always visible"
+                value={positiveValue * 100}
+                marks={marks}
+                valueLabelDisplay="on"
+                disabled
+              />
+            </Box>
+
+            <hr />
+            <Typography sx={{ fontWeight: 'bold', }}>
               Study Catorgorized as: SARS-CoV-2: {loading ? <CircularProgress /> : predicitonValue.toUpperCase()}
             </Typography>
             <hr />
@@ -174,10 +229,10 @@ function App() {
               This application is intended only to demonstrate the power of
               residual neural networks on image based data sets. All 9 sample images are Covid-19 Positive.
               It should not be used as a diagnostic tool.
-              For information about Covid 19 reach out your doctor or visit: 
+              For information about Covid 19 reach out your doctor or visit:
               <Link href="https://www.cdc.gov/coronavirus/2019-ncov/index.html"> https://www.cdc.gov/coronavirus/2019-ncov/index.html</Link>
             </Typography>
-            
+
           </Paper>
         </Grid>
       </Grid>
