@@ -166,8 +166,8 @@ function App() {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item>
-          <Paper variant="outlined" sx={{ height: '88vh', width: '20vw', margin: 1, padding: 1 }}>
+        <Grid item s={3} xs={12}>
+          <Paper variant="outlined" sx={{  margin: 1, padding: 1 }}>
             <Typography variant='h5'>
               Data used to create the model: <br />
             </Typography>
